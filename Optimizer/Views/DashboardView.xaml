@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="OpenCube.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             Loaded="OnLoaded" Unloaded="OnUnloaded">
+    <UserControl.Resources>
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="18" />
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <TextBlock Text="Panel" FontSize="28" FontWeight="SemiBold" />
+            <TextBlock x:Name="UptimeText" Opacity="0.7" Margin="0,4,0,18" />
+
+            <UniformGrid Columns="3">
+                <Border Style="{StaticResource Card}" Margin="0,0,12,12">
+                    <StackPanel>
+                        <TextBlock Text="CPU" Opacity="0.7" />
+                        <TextBlock x:Name="CpuText" FontSize="36" FontWeight="SemiBold" Margin="0,4,0,10" />
+                        <ProgressBar x:Name="CpuBar" Height="6" Maximum="100" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}" Margin="0,0,12,12">
+                    <StackPanel>
+                        <TextBlock Text="Memoria RAM" Opacity="0.7" />
+                        <TextBlock x:Name="RamText" FontSize="36" FontWeight="SemiBold" Margin="0,4,0,0" />
+                        <TextBlock x:Name="RamDetail" Opacity="0.6" FontSize="12" Margin="0,0,0,8" />
+                        <ProgressBar x:Name="RamBar" Height="6" Maximum="100" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="Disco del sistema" Opacity="0.7" />
+                        <TextBlock x:Name="DiskText" FontSize="36" FontWeight="SemiBold" Margin="0,4,0,0" />
+                        <TextBlock x:Name="DiskDetail" Opacity="0.6" FontSize="12" Margin="0,0,0,8" />
+                        <ProgressBar x:Name="DiskBar" Height="6" Maximum="100" />
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="Procesos que más memoria usan" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,12" />
+                    <ItemsControl x:Name="ProcList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="180" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="90" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                    <ProgressBar Grid.Column="1" Value="{Binding Relative, Mode=OneWay}" Maximum="100"
+                                                 Height="4" Margin="12,0" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="2" Text="{Binding MemoryText}" HorizontalAlignment="Right"
+                                               VerticalAlignment="Center" Opacity="0.8" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

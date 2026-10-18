@@ -1,0 +1,105 @@
+<UserControl x:Class="OpenCube.Views.MemoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:ctl="clr-namespace:OpenCube.Controls"
+             Loaded="OnLoaded" Unloaded="OnUnloaded">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Memoria" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" />
+                <ctl:SeverityBadge Severity="Medium" Margin="12,6,0,0"
+                                   Message="Windows ya gestiona la RAM sola y la memoria «usada» suele ser caché útil, así que estas acciones solo ayudan en casos concretos (por ejemplo, cuando notas lentitud porque se llenó la RAM). Lo más efectivo siempre es cerrar los programas que más consumen." />
+            </StackPanel>
+            <TextBlock Opacity="0.7" Margin="0,4,0,16" TextWrapping="Wrap"
+                       Text="Aquí ves en qué estado está tu RAM y qué puedes hacer. Ningún «liberador» hace magia: estas herramientas mueven o descartan memoria, y te decimos exactamente qué consecuencias tiene cada una." />
+
+            <Border Style="{StaticResource CardStyle}" Padding="18">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Margin="0,0,16,0">
+                        <TextBlock Text="En uso" Opacity="0.7" />
+                        <TextBlock x:Name="UsedText" FontSize="30" FontWeight="SemiBold" />
+                        <TextBlock x:Name="UsedDetail" Opacity="0.6" FontSize="12" Margin="0,0,0,8" />
+                        <ProgressBar x:Name="UsedBar" Maximum="100" Height="6" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Margin="0,0,16,0">
+                        <TextBlock Text="Disponible" Opacity="0.7" />
+                        <TextBlock x:Name="FreeText" FontSize="30" FontWeight="SemiBold" />
+                        <TextBlock Text="libre + caché reutilizable" Opacity="0.6" FontSize="12" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="En espera (caché)" Opacity="0.7" />
+                        <TextBlock x:Name="StandbyText" FontSize="30" FontWeight="SemiBold" />
+                        <TextBlock Text="archivos recientes que Windows conserva" Opacity="0.6" FontSize="12" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <TextBlock Text="Qué puedes hacer" FontSize="16" FontWeight="SemiBold" Margin="0,12,0,8" />
+
+            <Border Style="{StaticResource CardStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Reducir la memoria de los programas en segundo plano" FontWeight="SemiBold" VerticalAlignment="Center" />
+                            <ctl:SeverityBadge Severity="Low" Margin="8,0,0,0"
+                                               Message="Le pide a Windows que saque de la RAM la memoria que los programas en segundo plano no están usando. No cierra nada ni toca lo que tienes en primer plano. El efecto es temporal: cuando un programa vuelva a necesitar esa memoria, la recupera y puede tardar un instante extra en reaccionar. No se tocan los procesos del sistema ni los antivirus." />
+                        </StackPanel>
+                        <TextBlock Text="Libera RAM al momento sin cerrar programas. Útil antes de abrir algo pesado." Opacity="0.7" FontSize="12"
+                                   TextWrapping="Wrap" Margin="0,3,0,0" />
+                    </StackPanel>
+                    <ui:Button x:Name="TrimButton" Grid.Column="1" Content="Ejecutar" Appearance="Primary" VerticalAlignment="Center"
+                               Margin="16,0,0,0" Click="OnTrim" />
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Vaciar la memoria en espera" FontWeight="SemiBold" VerticalAlignment="Center" />
+                            <ctl:SeverityBadge Severity="Medium" Margin="8,0,0,0"
+                                               Message="Descarta la caché de archivos que Windows mantiene en la RAM. Libera mucha memoria de golpe, pero Windows la usaba para abrir archivos y programas más rápido, así que durante un rato todo lo que leas del disco irá más lento mientras se vuelve a llenar. Solo merece la pena si tienes tirones por RAM llena de caché. Requiere ejecutar como administrador." />
+                        </StackPanel>
+                        <TextBlock x:Name="PurgeNote" Opacity="0.7" FontSize="12" TextWrapping="Wrap" Margin="0,3,0,0"
+                                   Text="Para casos concretos, como tirones en juegos con la RAM llena de caché." />
+                    </StackPanel>
+                    <ui:Button x:Name="PurgeButton" Grid.Column="1" Content="Ejecutar" VerticalAlignment="Center"
+                               Margin="16,0,0,0" Click="OnPurge" />
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Cerrar los programas que más consumen" FontWeight="SemiBold" />
+                        <TextBlock Text="Lo más efectivo de verdad. Verás los procesos en segundo plano que sobran y decides cuáles cerrar."
+                                   Opacity="0.7" FontSize="12" TextWrapping="Wrap" Margin="0,3,0,0" />
+                    </StackPanel>
+                    <ui:Button Grid.Column="1" Content="Ver procesos" VerticalAlignment="Center" Margin="16,0,0,0" Click="OnOpenProcesses" />
+                </Grid>
+            </Border>
+
+            <Border x:Name="ResultBar" Visibility="Collapsed" Padding="16,12" CornerRadius="8" Margin="0,4,0,0">
+                <TextBlock x:Name="ResultText" Foreground="White" TextWrapping="Wrap" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

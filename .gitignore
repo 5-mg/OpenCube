@@ -1,0 +1,19 @@
+# Build output
+bin/
+obj/
+publish/
+*.nupkg
+
+# Editor / IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Tests and logs
+TestResults/
+*.log
+
+# OS
+Thumbs.db
+Desktop.ini
